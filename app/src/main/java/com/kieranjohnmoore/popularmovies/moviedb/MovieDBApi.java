@@ -17,6 +17,9 @@ import java.util.List;
 import java.util.Scanner;
 
 public class MovieDBApi {
+    public static final int POSTER_IMAGE_WIDTH = 342;
+    public static final String POSTER_URL = "https://image.tmdb.org/t/p/w342";
+
     private static final String API_KEY = "INSERT_YOUR_API_KEY";
     private static final String BASE_URL = "https://api.themoviedb.org/3/discover/movie";
 

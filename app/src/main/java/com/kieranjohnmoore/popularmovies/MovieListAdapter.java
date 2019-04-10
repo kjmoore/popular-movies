@@ -1,19 +1,25 @@
 package com.kieranjohnmoore.popularmovies;
 
+import android.net.Uri;
 import android.support.annotation.NonNull;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.kieranjohnmoore.popularmovies.moviedb.MovieDBApi;
 import com.kieranjohnmoore.popularmovies.moviedb.model.Movie;
+import com.squareup.picasso.Picasso;
 
 import java.util.Collections;
 import java.util.List;
 
 public class MovieListAdapter extends RecyclerView.Adapter<MovieListAdapter.MovieListViewHolder> {
+    private static final String TAG = MovieListAdapter.class.getSimpleName();
 
     private List<Movie> movies = Collections.emptyList();
 
@@ -28,7 +34,7 @@ public class MovieListAdapter extends RecyclerView.Adapter<MovieListAdapter.Movi
     @Override
     public void onBindViewHolder(@NonNull MovieListViewHolder movieListViewHolder, int i) {
         final Movie movie = movies.get(i);
-        movieListViewHolder.setBackground(movie.getBackdropPath());
+        movieListViewHolder.setBackground(movie.getPosterPath());
         movieListViewHolder.setMovieName(movie.getTitle());
     }
 
@@ -37,7 +43,7 @@ public class MovieListAdapter extends RecyclerView.Adapter<MovieListAdapter.Movi
         return movies.size();
     }
 
-    public void updateMovies(List<Movie> movies) {
+    void updateMovies(List<Movie> movies) {
         this.movies = movies;
         notifyDataSetChanged();
     }
@@ -53,6 +59,21 @@ public class MovieListAdapter extends RecyclerView.Adapter<MovieListAdapter.Movi
         }
 
         void setBackground(@NonNull final String url) {
+            final Picasso.Builder picassoBuilder = new Picasso.Builder(backgroundView.getContext());
+
+            picassoBuilder.listener(new Picasso.Listener() {
+                @Override
+                public void onImageLoadFailed(Picasso picasso, Uri uri, Exception exception) {
+                    Log.e(TAG, uri.toString(), exception);
+                    backgroundView.setVisibility(View.INVISIBLE);
+                }
+            });
+
+            picassoBuilder.build()
+                .load(MovieDBApi.POSTER_URL + url)
+                .fit()
+                .centerCrop()
+                .into(backgroundView);
         }
 
         void setMovieName(@NonNull final String movieName) {

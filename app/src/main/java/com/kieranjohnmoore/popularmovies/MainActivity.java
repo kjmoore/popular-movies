@@ -6,6 +6,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.DisplayMetrics;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -53,7 +54,7 @@ public class MainActivity extends AppCompatActivity {
 
         final RecyclerView mainView = findViewById(R.id.main_view);
 
-        final GridLayoutManager layoutManager = new GridLayoutManager(this, 2);
+        final GridLayoutManager layoutManager = new GridLayoutManager(this, getSpanCount());
         mainView.setLayoutManager(layoutManager);
 
         mainView.setAdapter(movieListAdapter);
@@ -70,5 +71,15 @@ public class MainActivity extends AppCompatActivity {
             return true;
         }
         return super.onOptionsItemSelected(item);
+    }
+
+    private int getSpanCount() {
+        final DisplayMetrics displayMetrics = this.getResources().getDisplayMetrics();
+        final float screenWidthDp = displayMetrics.widthPixels / displayMetrics.density;
+
+        final float columnWidthDp = MovieDBApi.POSTER_IMAGE_WIDTH / displayMetrics.density;
+
+        float total = screenWidthDp / columnWidthDp;
+        return Math.round(total);
     }
 }
