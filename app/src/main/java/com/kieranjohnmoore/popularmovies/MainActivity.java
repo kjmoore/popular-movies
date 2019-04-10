@@ -29,6 +29,7 @@ public class MainActivity extends AppCompatActivity {
         protected List<Movie> doInBackground(String... strings) {
             final List<Movie> movies = new MovieDBApi().getMovies(1);
 
+            //TODO: Handle no data
             Log.d(TAG, Arrays.toString(movies.toArray()));
             return movies;
         }

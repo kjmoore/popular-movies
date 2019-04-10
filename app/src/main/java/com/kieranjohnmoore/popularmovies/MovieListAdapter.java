@@ -13,6 +13,7 @@ import android.widget.TextView;
 
 import com.kieranjohnmoore.popularmovies.moviedb.MovieDBApi;
 import com.kieranjohnmoore.popularmovies.moviedb.model.Movie;
+import com.squareup.picasso.Callback;
 import com.squareup.picasso.Picasso;
 
 import java.util.Collections;
@@ -59,6 +60,7 @@ public class MovieListAdapter extends RecyclerView.Adapter<MovieListAdapter.Movi
         }
 
         void setBackground(@NonNull final String url) {
+            backgroundView.setVisibility(View.INVISIBLE);
             final Picasso.Builder picassoBuilder = new Picasso.Builder(backgroundView.getContext());
 
             picassoBuilder.listener(new Picasso.Listener() {
@@ -73,7 +75,17 @@ public class MovieListAdapter extends RecyclerView.Adapter<MovieListAdapter.Movi
                 .load(MovieDBApi.POSTER_URL + url)
                 .fit()
                 .centerCrop()
-                .into(backgroundView);
+                .into(backgroundView, new Callback() {
+                    @Override
+                    public void onSuccess() {
+                        backgroundView.setVisibility(View.VISIBLE);
+                    }
+
+                    @Override
+                    public void onError() {
+                        Log.e(TAG, "Could not load image");
+                    }
+                });
         }
 
         void setMovieName(@NonNull final String movieName) {

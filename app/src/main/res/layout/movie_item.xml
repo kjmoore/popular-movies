@@ -3,12 +3,18 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:background="@color/posterBackground">
+    android:background="@drawable/poster_background">
 
     <TextView
         android:id="@+id/movie_text"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+        android:layout_marginLeft="8dp"
+        android:layout_marginTop="8dp"
+        android:layout_marginEnd="8dp"
+        android:layout_marginRight="8dp"
+        android:layout_marginBottom="8dp"
         android:textAlignment="center"
         android:textColor="@color/posterText"
         app:layout_constraintBottom_toBottomOf="parent"
@@ -25,6 +31,7 @@
         app:layout_constraintTop_toTopOf="parent"
         android:layout_width="match_parent"
         android:layout_height="0dp"
+        android:background="@color/posterText"
         app:layout_constraintDimensionRatio="342:513"
         />
 
