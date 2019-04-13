@@ -1,12 +1,12 @@
 package com.kieranjohnmoore.popularmovies.moviedb.model;
 
-import android.support.annotation.NonNull;
-
 import com.google.gson.annotations.SerializedName;
 
 import java.io.Serializable;
 import java.util.Collections;
 import java.util.List;
+
+import androidx.annotation.NonNull;
 
 public class Movie implements Serializable {
 

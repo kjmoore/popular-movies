@@ -3,7 +3,6 @@ package com.kieranjohnmoore.popularmovies;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
-import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.Menu;
 import android.widget.ImageView;
@@ -16,6 +15,10 @@ import com.squareup.picasso.Picasso;
 
 import java.util.Locale;
 
+import androidx.appcompat.app.AppCompatActivity;
+import butterknife.BindView;
+import butterknife.ButterKnife;
+
 public class DetailActivity extends AppCompatActivity {
     private static final String TAG = DetailActivity.class.getSimpleName();
 
@@ -23,10 +26,22 @@ public class DetailActivity extends AppCompatActivity {
 
     private Movie movie;
 
+    @BindView(R.id.title)
+    TextView title;
+    @BindView(R.id.poster)
+    ImageView poster;
+    @BindView(R.id.synopsis)
+    TextView synopsis;
+    @BindView(R.id.user_rating)
+    TextView userRating;
+    @BindView(R.id.release_date)
+    TextView releaseDate;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_detail);
+        ButterKnife.bind(this);
 
         final Intent intent = getIntent();
         if (intent == null) {
@@ -47,13 +62,6 @@ public class DetailActivity extends AppCompatActivity {
     }
 
     private void populateUI() {
-
-        final TextView title = findViewById(R.id.title);
-        final ImageView poster = findViewById(R.id.poster);
-        final TextView synopsis = findViewById(R.id.synopsis);
-        final TextView userRating = findViewById(R.id.user_rating);
-        final TextView releaseDate = findViewById(R.id.release_date);
-
         title.setText(movie.getTitle());
         setImage(poster, movie.getPosterPath());
         synopsis.setText(movie.getOverview());
