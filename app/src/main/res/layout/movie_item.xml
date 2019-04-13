@@ -4,6 +4,8 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:background="@drawable/poster_background">
+    <!-- Note that the background is used to show a border instead of the recycler view decoration
+    so it only appears if no image is shown. -->
 
     <TextView
         android:id="@+id/movie_text"
@@ -31,7 +33,6 @@
         app:layout_constraintTop_toTopOf="parent"
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        android:background="@color/posterText"
         app:layout_constraintDimensionRatio="342:513"
         />
 

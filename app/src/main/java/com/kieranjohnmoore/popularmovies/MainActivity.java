@@ -4,13 +4,11 @@ import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.GridLayoutManager;
-import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.DisplayMetrics;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.widget.TextView;
 import android.widget.Toast;
 
 import com.kieranjohnmoore.popularmovies.moviedb.MovieDBApi;
@@ -30,6 +28,7 @@ public class MainActivity extends AppCompatActivity {
             final List<Movie> movies = new MovieDBApi().getMovies(1);
 
             //TODO: Handle no data
+            //TODO: Handle more pages
             Log.d(TAG, Arrays.toString(movies.toArray()));
             return movies;
         }

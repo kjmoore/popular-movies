@@ -1,8 +1,8 @@
 package com.kieranjohnmoore.popularmovies;
 
+import android.content.Intent;
 import android.net.Uri;
 import android.support.annotation.NonNull;
-import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -35,8 +35,7 @@ public class MovieListAdapter extends RecyclerView.Adapter<MovieListAdapter.Movi
     @Override
     public void onBindViewHolder(@NonNull MovieListViewHolder movieListViewHolder, int i) {
         final Movie movie = movies.get(i);
-        movieListViewHolder.setBackground(movie.getPosterPath());
-        movieListViewHolder.setMovieName(movie.getTitle());
+        movieListViewHolder.setMovie(movie);
     }
 
     @Override
@@ -49,17 +48,27 @@ public class MovieListAdapter extends RecyclerView.Adapter<MovieListAdapter.Movi
         notifyDataSetChanged();
     }
 
-    class MovieListViewHolder extends RecyclerView.ViewHolder {
+    class MovieListViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
         private final ImageView backgroundView;
         private final TextView movieNameView;
+
+        private Movie movie;
 
         MovieListViewHolder(@NonNull View itemView) {
             super(itemView);
             backgroundView = itemView.findViewById(R.id.background_poster);
             movieNameView = itemView.findViewById(R.id.movie_text);
+            itemView.setOnClickListener(this);
         }
 
-        void setBackground(@NonNull final String url) {
+        private void setMovie(@NonNull final Movie movie) {
+            this.movie = movie;
+
+            movieNameView.setText(movie.getTitle());
+            setBackground(movie.getPosterPath());
+        }
+
+        private void setBackground(@NonNull final String url) {
             backgroundView.setVisibility(View.INVISIBLE);
             final Picasso.Builder picassoBuilder = new Picasso.Builder(backgroundView.getContext());
 
@@ -83,13 +92,18 @@ public class MovieListAdapter extends RecyclerView.Adapter<MovieListAdapter.Movi
 
                     @Override
                     public void onError() {
+                        // The background will remain invisible so will show the text title behind
                         Log.e(TAG, "Could not load image");
                     }
                 });
         }
 
-        void setMovieName(@NonNull final String movieName) {
-            movieNameView.setText(movieName);
+        @Override
+        public void onClick(View v) {
+            Log.d(TAG, "Clicked: " + movies.get(getAdapterPosition()).getTitle());
+            final Intent intent = new Intent(v.getContext(), DetailActivity.class);
+            intent.putExtra(DetailActivity.MOVIE, movie);
+            v.getContext().startActivity(intent);
         }
     }
 }

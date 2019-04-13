@@ -3,4 +3,6 @@
     <string name="reload">Reload</string>
     <string name="reload_text">Reloading movies from server</string>
     <string name="movie_poster_image">Movie Poster Image</string>
+    <string name="title_activity_details">DetailsActivity</string>
+    <string name="detail_error_message">Could not display movie data</string>
 </resources>
