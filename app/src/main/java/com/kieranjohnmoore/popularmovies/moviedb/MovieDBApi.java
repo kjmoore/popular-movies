@@ -27,13 +27,12 @@ public class MovieDBApi {
     public static final String POSTER_URL = SCHEME + "://image.tmdb.org/t/p/w342";
 
     private static final String API_KEY = BuildConfig.TheMovieDBAPIKey;
-    private static final String BASE_URL = SCHEME + "://api.themoviedb.org/3/discover/movie";
+    private static final String BASE_URL = SCHEME + "://api.themoviedb.org/3/movie/";
 
     private static final String KEY_API_KEY = "api_key";
-    private static final String KEY_SORT_BY = "sort_by";
     private static final String KEY_PAGE = "page";
-    private static final String KEY_POPULAR = "popularity.desc";
-    private static final String KEY_RATING = "vote_average.desc";
+    private static final String KEY_POPULAR = "popular";
+    private static final String KEY_RATING = "top_rated";
 
     public enum SortBy {
         POPULAR(KEY_POPULAR),
@@ -52,9 +51,8 @@ public class MovieDBApi {
     public static final int POSTER_IMAGE_WIDTH = 342;
 
     List<Movie> getMovies(int page, SortBy key) {
-        final Uri uri = Uri.parse(BASE_URL).buildUpon()
+        final Uri uri = Uri.parse(BASE_URL + key.getKey()).buildUpon()
                 .appendQueryParameter(KEY_API_KEY, API_KEY)
-                .appendQueryParameter(KEY_SORT_BY, key.getKey())
                 .appendQueryParameter(KEY_PAGE, Integer.toString(page))
                 .build();
 
