@@ -8,4 +8,10 @@
     <string name="no_data">No movies could be downloaded</string>
     <string name="sort_popular">Sort by most popular</string>
     <string name="sort_rating">Sort by user rating</string>
+    <string name="release_date">Unknown</string>
+    <string name="synopsis">Could not load synopsis</string>
+    <string name="user_rating">Unknown</string>
+    <string name="user_rating_tag">User Rating:</string>
+    <string name="release_date_tag">Released:</string>
+    <string name="movie_title">Unknown</string>
 </resources>

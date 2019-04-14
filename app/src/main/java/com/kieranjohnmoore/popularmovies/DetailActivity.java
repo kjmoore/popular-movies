@@ -25,7 +25,7 @@ public class DetailActivity extends AppCompatActivity {
 
     private Movie movie;
 
-    @BindView(R.id.title)
+    @BindView(R.id.movie_title)
     TextView title;
     @BindView(R.id.poster)
     ImageView poster;
