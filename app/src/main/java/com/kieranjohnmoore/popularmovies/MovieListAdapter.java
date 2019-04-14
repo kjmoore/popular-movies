@@ -76,12 +76,9 @@ public class MovieListAdapter extends RecyclerView.Adapter<MovieListAdapter.Movi
             backgroundView.setVisibility(View.INVISIBLE);
             final Picasso.Builder picassoBuilder = new Picasso.Builder(backgroundView.getContext());
 
-            picassoBuilder.listener(new Picasso.Listener() {
-                @Override
-                public void onImageLoadFailed(Picasso picasso, Uri uri, Exception exception) {
-                    Log.e(TAG, uri.toString(), exception);
-                    backgroundView.setVisibility(View.INVISIBLE);
-                }
+            picassoBuilder.listener((picasso, uri, exception) -> {
+                Log.e(TAG, uri.toString(), exception);
+                backgroundView.setVisibility(View.INVISIBLE);
             });
 
             picassoBuilder.build()

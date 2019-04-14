@@ -1,7 +1,6 @@
 package com.kieranjohnmoore.popularmovies;
 
 import android.content.Intent;
-import android.net.Uri;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.Menu;
@@ -67,17 +66,14 @@ public class DetailActivity extends AppCompatActivity {
         synopsis.setText(movie.getOverview());
         userRating.setText(String.format(Locale.getDefault(),"%.2f", movie.getVoteAverage()));
         releaseDate.setText(movie.getReleaseDate());
+
+        setTitle(movie.getTitle());
     }
 
     private void setImage(ImageView poster, final String posterPath) {
         final Picasso.Builder picassoBuilder = new Picasso.Builder(poster.getContext());
 
-        picassoBuilder.listener(new Picasso.Listener() {
-            @Override
-            public void onImageLoadFailed(Picasso picasso, Uri uri, Exception exception) {
-                Log.e(TAG, uri.toString(), exception);
-            }
-        });
+        picassoBuilder.listener((picasso, uri, exception) -> Log.e(TAG, uri.toString(), exception));
 
         picassoBuilder.build()
                 .load(MovieDBApi.POSTER_URL + posterPath)
@@ -90,8 +86,6 @@ public class DetailActivity extends AppCompatActivity {
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.detail, menu);
-
-        Log.e("TIS", movie.toString());
 
         return true;
     }

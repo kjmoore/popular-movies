@@ -18,7 +18,7 @@ import java.util.List;
 import java.util.Scanner;
 
 public class MovieDBApi {
-    public static final int POSTER_IMAGE_WIDTH = 342;
+    private static final String TAG = MovieDBApi.class.getSimpleName();
 
     //Older builds didn't support TLS1.2 as used with themoviedb - so use http for those
     //TODO: Should probably override the TLS implementation and manually enable TLS1.2
@@ -34,6 +34,8 @@ public class MovieDBApi {
     private static final String KEY_POPULAR = "popularity.desc";
     private static final String KEY_RATING = "vote_average.desc";
 
+    public static final int POSTER_IMAGE_WIDTH = 342;
+
     public List<Movie> getMovies(int page) {
         final Uri uri = Uri.parse(BASE_URL).buildUpon()
                 .appendQueryParameter(KEY_API_KEY, API_KEY)
@@ -48,12 +50,11 @@ public class MovieDBApi {
             e.printStackTrace();
         }
 
-        Log.v("TEST", "Built URI " + url);
+        Log.d(TAG, "Connecting to URL: " + url);
 
         try {
             final String data = getResponseFromHttpUrl(url);
 
-            Log.v("TEST", data);
             MovieList list = new Gson().fromJson(data, MovieList.class);
             return list.getResults();
         } catch (IOException e) {
