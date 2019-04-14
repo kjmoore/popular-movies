@@ -5,4 +5,5 @@
     <string name="movie_poster_image">Movie Poster Image</string>
     <string name="title_activity_details">DetailsActivity</string>
     <string name="detail_error_message">Could not display movie data</string>
+    <string name="no_data">No movies could be downloaded</string>
 </resources>

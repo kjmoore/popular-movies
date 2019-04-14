@@ -1,17 +1,19 @@
 package com.kieranjohnmoore.popularmovies;
 
-import android.os.AsyncTask;
 import android.os.Bundle;
 import android.util.DisplayMetrics;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
+import android.widget.ProgressBar;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.kieranjohnmoore.popularmovies.moviedb.MovieDBApi;
+import com.kieranjohnmoore.popularmovies.moviedb.MovieListDownloader;
 import com.kieranjohnmoore.popularmovies.moviedb.model.Movie;
 
-import java.util.Arrays;
 import java.util.List;
 
 import androidx.appcompat.app.AppCompatActivity;
@@ -27,25 +29,10 @@ public class MainActivity extends AppCompatActivity {
 
     @BindView(R.id.main_view)
     RecyclerView mainView;
-
-    private class BackgroundTask extends AsyncTask<String, Void, List<Movie>> {
-        @Override
-        protected List<Movie> doInBackground(String... strings) {
-            final List<Movie> movies = new MovieDBApi().getMovies(1);
-
-            //TODO: Handle no data
-            //TODO: Handle more pages
-            Log.d(TAG, Arrays.toString(movies.toArray()));
-            return movies;
-        }
-
-        @Override
-        protected void onPostExecute(List<Movie> movies) {
-            movieListAdapter.updateMovies(movies);
-
-            super.onPostExecute(movies);
-        }
-    }
+    @BindView(R.id.progress_bar)
+    ProgressBar progressBar;
+    @BindView(R.id.no_data)
+    TextView noData;
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -59,11 +46,31 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
         ButterKnife.bind(this);
 
+        mainView.setVisibility(View.INVISIBLE);
+
         final GridLayoutManager layoutManager = new GridLayoutManager(this, getSpanCount());
         mainView.setLayoutManager(layoutManager);
         mainView.setAdapter(movieListAdapter);
 
-        new BackgroundTask().execute();
+        new MovieListDownloader(this).execute(1);
+    }
+
+    public void startUIUpdate() {
+        Log.d(TAG, "Loading new data");
+        mainView.setVisibility(View.INVISIBLE);
+        noData.setVisibility(View.INVISIBLE);
+        progressBar.setVisibility(View.VISIBLE);
+    }
+
+    public void finishUIUpdate(List<Movie> movies) {
+        Log.d(TAG, "Updating UI with new data");
+        movieListAdapter.updateMovies(movies);
+        progressBar.setVisibility(View.INVISIBLE);
+        if (movies.size() > 0) {
+            mainView.setVisibility(View.VISIBLE);
+        } else {
+            noData.setVisibility(View.VISIBLE);
+        }
     }
 
     @Override
@@ -71,7 +78,7 @@ public class MainActivity extends AppCompatActivity {
         if (R.id.action_reload == item.getItemId()) {
             final String textToShow = getString(R.string.reload_text);
             Toast.makeText(MainActivity.this, textToShow, Toast.LENGTH_SHORT).show();
-            new BackgroundTask().execute();
+            new MovieListDownloader(this).execute(1);
             return true;
         }
         return super.onOptionsItemSelected(item);

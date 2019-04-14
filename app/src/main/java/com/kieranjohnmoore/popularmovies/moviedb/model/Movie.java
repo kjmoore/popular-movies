@@ -8,6 +8,11 @@ import java.util.List;
 
 import androidx.annotation.NonNull;
 
+/*
+   Note: Currently using Serializable for code readability as it is an infrequent read,
+    if parsing of this object becomes a frequent action,
+    this should be changed to use Parcelable for speed.
+ */
 public class Movie implements Serializable {
 
     @SerializedName("poster_path")

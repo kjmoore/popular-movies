@@ -21,7 +21,7 @@ public class MovieDBApi {
     private static final String TAG = MovieDBApi.class.getSimpleName();
 
     //Older builds didn't support TLS1.2 as used with themoviedb - so use http for those
-    //TODO: Should probably override the TLS implementation and manually enable TLS1.2
+    //TODO: Override the TLS implementation and manually enable TLS1.2
     private static final String SCHEME = (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) ? "https" : "http";
     public static final String POSTER_URL = SCHEME + "://image.tmdb.org/t/p/w342";
 
@@ -33,10 +33,11 @@ public class MovieDBApi {
     private static final String KEY_PAGE = "page";
     private static final String KEY_POPULAR = "popularity.desc";
     private static final String KEY_RATING = "vote_average.desc";
+    //TODO: Top rated
 
     public static final int POSTER_IMAGE_WIDTH = 342;
 
-    public List<Movie> getMovies(int page) {
+    List<Movie> getMovies(int page) {
         final Uri uri = Uri.parse(BASE_URL).buildUpon()
                 .appendQueryParameter(KEY_API_KEY, API_KEY)
                 .appendQueryParameter(KEY_SORT_BY, KEY_POPULAR)
@@ -55,28 +56,30 @@ public class MovieDBApi {
         try {
             final String data = getResponseFromHttpUrl(url);
 
-            MovieList list = new Gson().fromJson(data, MovieList.class);
-            return list.getResults();
+            if (!data.isEmpty()) {
+                MovieList list = new Gson().fromJson(data, MovieList.class);
+                return list.getResults();
+            }
         } catch (IOException e) {
-            e.printStackTrace();
+            Log.e(TAG, "Could not download data", e);
         }
 
         return Collections.emptyList();
     }
 
     private static String getResponseFromHttpUrl(URL url) throws IOException {
-        HttpURLConnection urlConnection = (HttpURLConnection) url.openConnection();
+        final HttpURLConnection urlConnection = (HttpURLConnection) url.openConnection();
         try {
-            InputStream in = urlConnection.getInputStream();
+            final InputStream in = urlConnection.getInputStream();
 
-            Scanner scanner = new Scanner(in);
+            final Scanner scanner = new Scanner(in);
             scanner.useDelimiter("\\A");
 
-            boolean hasInput = scanner.hasNext();
+            final boolean hasInput = scanner.hasNext();
             if (hasInput) {
                 return scanner.next();
             } else {
-                return null;
+                return "";
             }
         } finally {
             urlConnection.disconnect();
