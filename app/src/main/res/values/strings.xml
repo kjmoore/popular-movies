@@ -6,4 +6,6 @@
     <string name="title_activity_details">DetailsActivity</string>
     <string name="detail_error_message">Could not display movie data</string>
     <string name="no_data">No movies could be downloaded</string>
+    <string name="sort_popular">Sort by most popular</string>
+    <string name="sort_rating">Sort by user rating</string>
 </resources>

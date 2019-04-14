@@ -34,6 +34,8 @@ public class MainActivity extends AppCompatActivity {
     @BindView(R.id.no_data)
     TextView noData;
 
+    MovieDBApi.SortBy sortBy = MovieDBApi.SortBy.POPULAR;
+
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.main_menu, menu);
@@ -52,7 +54,7 @@ public class MainActivity extends AppCompatActivity {
         mainView.setLayoutManager(layoutManager);
         mainView.setAdapter(movieListAdapter);
 
-        new MovieListDownloader(this).execute(1);
+        new MovieListDownloader(this, sortBy).execute(1);
     }
 
     public void startUIUpdate() {
@@ -75,13 +77,23 @@ public class MainActivity extends AppCompatActivity {
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        if (R.id.action_reload == item.getItemId()) {
-            final String textToShow = getString(R.string.reload_text);
-            Toast.makeText(MainActivity.this, textToShow, Toast.LENGTH_SHORT).show();
-            new MovieListDownloader(this).execute(1);
-            return true;
+        switch(item.getItemId()) {
+            case R.id.action_reload:
+                final String textToShow = getString(R.string.reload_text);
+                Toast.makeText(MainActivity.this, textToShow, Toast.LENGTH_SHORT).show();
+                new MovieListDownloader(this, sortBy).execute(1);
+                return true;
+            case R.id.action_sort_popular:
+                sortBy = MovieDBApi.SortBy.POPULAR;
+                new MovieListDownloader(this, sortBy).execute(1);
+                return true;
+            case R.id.action_sort_rating:
+                sortBy = MovieDBApi.SortBy.RATING;
+                new MovieListDownloader(this, sortBy).execute(1);
+                return true;
+            default:
+                return super.onOptionsItemSelected(item);
         }
-        return super.onOptionsItemSelected(item);
     }
 
     private int getSpanCount() {

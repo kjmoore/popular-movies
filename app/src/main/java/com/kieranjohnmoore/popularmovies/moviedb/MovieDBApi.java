@@ -33,14 +33,27 @@ public class MovieDBApi {
     private static final String KEY_PAGE = "page";
     private static final String KEY_POPULAR = "popularity.desc";
     private static final String KEY_RATING = "vote_average.desc";
-    //TODO: Top rated
+
+    public enum SortBy {
+        POPULAR(KEY_POPULAR),
+        RATING(KEY_RATING);
+
+        private final String key;
+        SortBy(String key) {
+            this.key = key;
+        }
+
+        public String getKey() {
+            return key;
+        }
+    }
 
     public static final int POSTER_IMAGE_WIDTH = 342;
 
-    List<Movie> getMovies(int page) {
+    List<Movie> getMovies(int page, SortBy key) {
         final Uri uri = Uri.parse(BASE_URL).buildUpon()
                 .appendQueryParameter(KEY_API_KEY, API_KEY)
-                .appendQueryParameter(KEY_SORT_BY, KEY_POPULAR)
+                .appendQueryParameter(KEY_SORT_BY, key.getKey())
                 .appendQueryParameter(KEY_PAGE, Integer.toString(page))
                 .build();
 

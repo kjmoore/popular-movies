@@ -46,7 +46,7 @@ public class MovieListAdapter extends RecyclerView.Adapter<MovieListAdapter.Movi
         return movies.size();
     }
 
-    public void updateMovies(List<Movie> movies) {
+    void updateMovies(List<Movie> movies) {
         this.movies = movies;
         notifyDataSetChanged();
     }
@@ -72,7 +72,11 @@ public class MovieListAdapter extends RecyclerView.Adapter<MovieListAdapter.Movi
             setBackground(movie.getPosterPath());
         }
 
-        private void setBackground(@NonNull final String url) {
+        private void setBackground(final String url) {
+            if (url == null || url.isEmpty()) {
+                Log.w(TAG, "The image URL was empty, not setting the background");
+                return;
+            }
             backgroundView.setVisibility(View.INVISIBLE);
             final Picasso.Builder picassoBuilder = new Picasso.Builder(backgroundView.getContext());
 
