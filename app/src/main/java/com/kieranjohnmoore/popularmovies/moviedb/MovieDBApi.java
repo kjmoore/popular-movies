@@ -5,6 +5,7 @@ import android.os.Build;
 import android.util.Log;
 
 import com.google.gson.Gson;
+import com.kieranjohnmoore.popularmovies.BuildConfig;
 import com.kieranjohnmoore.popularmovies.moviedb.model.Movie;
 import com.kieranjohnmoore.popularmovies.moviedb.model.MovieList;
 
@@ -25,7 +26,7 @@ public class MovieDBApi {
     private static final String SCHEME = (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) ? "https" : "http";
     public static final String POSTER_URL = SCHEME + "://image.tmdb.org/t/p/w342";
 
-    private static final String API_KEY = "YOUR_API_KEY_HERE";
+    private static final String API_KEY = BuildConfig.TheMovieDBAPIKey;
     private static final String BASE_URL = SCHEME + "://api.themoviedb.org/3/discover/movie";
 
     private static final String KEY_API_KEY = "api_key";
