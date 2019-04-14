@@ -48,7 +48,7 @@ public class DetailActivity extends AppCompatActivity {
             return;
         }
 
-        movie = (Movie) intent.getSerializableExtra(MOVIE);
+        movie = intent.getParcelableExtra(MOVIE);
 
         Log.d(TAG, "Detail started with: " + movie.toString());
 

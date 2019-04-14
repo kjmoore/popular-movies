@@ -1,19 +1,17 @@
 package com.kieranjohnmoore.popularmovies.moviedb.model;
 
+import android.os.Parcel;
+import android.os.Parcelable;
+
 import com.google.gson.annotations.SerializedName;
 
-import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
 import androidx.annotation.NonNull;
 
-/*
-   Note: Currently using Serializable for code readability as it is an infrequent read,
-    if parsing of this object becomes a frequent action,
-    this should be changed to use Parcelable for speed.
- */
-public class Movie implements Serializable {
+public class Movie implements Parcelable {
 
     @SerializedName("poster_path")
     private String posterPath = "";
@@ -114,4 +112,55 @@ public class Movie implements Serializable {
                 ", voteAverage=" + voteAverage +
                 '}';
     }
+
+    @Override
+    public int describeContents() {
+        return 0;
+    }
+
+    @Override
+    public void writeToParcel(Parcel dest, int flags) {
+        //Warning, changing this requires changes to the CREATOR
+        dest.writeString(posterPath);
+        dest.writeInt(adult ? 1 : 0);
+        dest.writeString(overview);
+        dest.writeString(releaseDate);
+        dest.writeList(genreIds);
+        dest.writeInt(id);
+        dest.writeString(originalTitle);
+        dest.writeString(originalLanguage);
+        dest.writeString(title);
+        dest.writeString(backdropPath);
+        dest.writeDouble(popularity);
+        dest.writeInt(voteCount);
+        dest.writeInt(video ? 1 : 0);
+        dest.writeDouble(voteAverage);
+    }
+
+    public static final Parcelable.Creator<Movie> CREATOR = new Parcelable.Creator<Movie>() {
+        public Movie createFromParcel(Parcel in) {
+            //Warning, any changes here need to be reflected in writeToParcel
+            final Movie unpackedMovie = new Movie();
+            unpackedMovie.posterPath = in.readString();
+            unpackedMovie.adult = (in.readInt() == 1);
+            unpackedMovie.overview = in.readString();
+            unpackedMovie.releaseDate = in.readString();
+            unpackedMovie.genreIds = new ArrayList<>();
+            in.readList(unpackedMovie.genreIds, Integer.class.getClassLoader());
+            unpackedMovie.id = in.readInt();
+            unpackedMovie.originalTitle = in.readString();
+            unpackedMovie.originalLanguage = in.readString();
+            unpackedMovie.title = in.readString();
+            unpackedMovie.backdropPath = in.readString();
+            unpackedMovie.popularity = in.readDouble();
+            unpackedMovie.voteCount = in.readInt();
+            unpackedMovie.video = (in.readInt() == 1);
+            unpackedMovie.voteAverage = in.readDouble();
+            return unpackedMovie;
+        }
+
+        public Movie[] newArray(int size) {
+            return new Movie[size];
+        }
+    };
 }
