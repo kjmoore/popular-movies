@@ -19,6 +19,8 @@ import java.util.List;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
+import butterknife.BindView;
+import butterknife.ButterKnife;
 
 public class MovieListAdapter extends RecyclerView.Adapter<MovieListAdapter.MovieListViewHolder> {
     private static final String TAG = MovieListAdapter.class.getSimpleName();
@@ -50,15 +52,16 @@ public class MovieListAdapter extends RecyclerView.Adapter<MovieListAdapter.Movi
     }
 
     class MovieListViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
-        private final ImageView backgroundView;
-        private final TextView movieNameView;
+        @BindView(R.id.background_poster)
+        ImageView backgroundView;
+        @BindView(R.id.movie_text)
+        TextView movieNameView;
 
         private Movie movie;
 
         MovieListViewHolder(@NonNull View itemView) {
             super(itemView);
-            backgroundView = itemView.findViewById(R.id.background_poster);
-            movieNameView = itemView.findViewById(R.id.movie_text);
+            ButterKnife.bind(this, itemView);
             itemView.setOnClickListener(this);
         }
 

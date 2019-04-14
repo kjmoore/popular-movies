@@ -17,11 +17,16 @@ import java.util.List;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
+import butterknife.BindView;
+import butterknife.ButterKnife;
 
 public class MainActivity extends AppCompatActivity {
     private static final String TAG = MainActivity.class.getSimpleName();
 
     private final MovieListAdapter movieListAdapter = new MovieListAdapter();
+
+    @BindView(R.id.main_view)
+    RecyclerView mainView;
 
     private class BackgroundTask extends AsyncTask<String, Void, List<Movie>> {
         @Override
@@ -52,12 +57,10 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-
-        final RecyclerView mainView = findViewById(R.id.main_view);
+        ButterKnife.bind(this);
 
         final GridLayoutManager layoutManager = new GridLayoutManager(this, getSpanCount());
         mainView.setLayoutManager(layoutManager);
-
         mainView.setAdapter(movieListAdapter);
 
         new BackgroundTask().execute();
