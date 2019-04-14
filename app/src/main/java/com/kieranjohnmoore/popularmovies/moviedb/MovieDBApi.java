@@ -1,6 +1,7 @@
 package com.kieranjohnmoore.popularmovies.moviedb;
 
 import android.net.Uri;
+import android.os.Build;
 import android.util.Log;
 
 import com.google.gson.Gson;
@@ -18,17 +19,20 @@ import java.util.Scanner;
 
 public class MovieDBApi {
     public static final int POSTER_IMAGE_WIDTH = 342;
-    public static final String POSTER_URL = "https://image.tmdb.org/t/p/w342";
+
+    //Older builds didn't support TLS1.2 as used with themoviedb - so use http for those
+    //TODO: Should probably override the TLS implementation and manually enable TLS1.2
+    private static final String SCHEME = (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) ? "https" : "http";
+    public static final String POSTER_URL = SCHEME + "://image.tmdb.org/t/p/w342";
 
     private static final String API_KEY = "INSERT_YOUR_API_KEY";
-    private static final String BASE_URL = "https://api.themoviedb.org/3/discover/movie";
+    private static final String BASE_URL = SCHEME + "://api.themoviedb.org/3/discover/movie";
 
     private static final String KEY_API_KEY = "api_key";
     private static final String KEY_SORT_BY = "sort_by";
     private static final String KEY_PAGE = "page";
     private static final String KEY_POPULAR = "popularity.desc";
     private static final String KEY_RATING = "vote_average.desc";
-
 
     public List<Movie> getMovies(int page) {
         final Uri uri = Uri.parse(BASE_URL).buildUpon()
