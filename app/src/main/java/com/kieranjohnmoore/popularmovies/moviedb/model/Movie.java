@@ -8,6 +8,7 @@ import com.google.gson.annotations.SerializedName;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import java.util.Locale;
 
 import androidx.annotation.NonNull;
 
@@ -80,6 +81,10 @@ public class Movie implements Parcelable {
         return popularity;
     }
 
+    public String getPopularityString() {
+        return String.format(Locale.getDefault(),"%.2f", getPopularity());
+    }
+
     public int getVoteCount() {
         return voteCount;
     }
@@ -90,6 +95,10 @@ public class Movie implements Parcelable {
 
     public double getVoteAverage() {
         return voteAverage;
+    }
+
+    public String getVoteAverageString() {
+        return String.format(Locale.getDefault(),"%.2f", getVoteAverage());
     }
 
     @NonNull

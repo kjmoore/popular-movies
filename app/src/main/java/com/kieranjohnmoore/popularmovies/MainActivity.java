@@ -6,10 +6,9 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.ProgressBar;
-import android.widget.TextView;
 import android.widget.Toast;
 
+import com.kieranjohnmoore.popularmovies.databinding.ActivityMainBinding;
 import com.kieranjohnmoore.popularmovies.moviedb.MovieDBApi;
 import com.kieranjohnmoore.popularmovies.moviedb.MovieListDownloader;
 import com.kieranjohnmoore.popularmovies.moviedb.model.Movie;
@@ -19,26 +18,19 @@ import java.util.List;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.databinding.DataBindingUtil;
 import androidx.loader.app.LoaderManager;
 import androidx.loader.content.Loader;
 import androidx.recyclerview.widget.GridLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
-import butterknife.BindView;
-import butterknife.ButterKnife;
 
 public class MainActivity extends AppCompatActivity
         implements LoaderManager.LoaderCallbacks<List<Movie>> {
     private static final String TAG = MainActivity.class.getSimpleName();
 
-    @BindView(R.id.main_view)
-    RecyclerView mainView;
-    @BindView(R.id.progress_bar)
-    ProgressBar progressBar;
-    @BindView(R.id.no_data)
-    TextView noData;
-
     private final MovieListAdapter movieListAdapter = new MovieListAdapter();
     private MovieDBApi.SortBy sortBy = MovieDBApi.SortBy.POPULAR;
+
+    ActivityMainBinding viewBinding;
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -50,13 +42,14 @@ public class MainActivity extends AppCompatActivity
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        ButterKnife.bind(this);
 
-        mainView.setVisibility(View.INVISIBLE);
+        viewBinding = DataBindingUtil.setContentView(this, R.layout.activity_main);
+
+        viewBinding.mainView.setVisibility(View.INVISIBLE);
 
         final GridLayoutManager layoutManager = new GridLayoutManager(this, getSpanCount());
-        mainView.setLayoutManager(layoutManager);
-        mainView.setAdapter(movieListAdapter);
+        viewBinding.mainView.setLayoutManager(layoutManager);
+        viewBinding.mainView.setAdapter(movieListAdapter);
 
         LoaderManager.getInstance(this).initLoader(
                 MovieListDownloader.LOADER_ID, getDownloaderBundle(), this);
@@ -72,9 +65,9 @@ public class MainActivity extends AppCompatActivity
     }
 
     private void showProgressBar() {
-        mainView.setVisibility(View.INVISIBLE);
-        noData.setVisibility(View.INVISIBLE);
-        progressBar.setVisibility(View.VISIBLE);
+        viewBinding.mainView.setVisibility(View.INVISIBLE);
+        viewBinding.noData.setVisibility(View.INVISIBLE);
+        viewBinding.progressBar.setVisibility(View.VISIBLE);
     }
 
     private void startUIUpdate() {
@@ -89,11 +82,11 @@ public class MainActivity extends AppCompatActivity
     private void finishUIUpdate(List<Movie> movies) {
         Log.d(TAG, "Updating UI with new data");
         movieListAdapter.updateMovies(movies);
-        progressBar.setVisibility(View.INVISIBLE);
+        viewBinding.progressBar.setVisibility(View.INVISIBLE);
         if (movies.size() > 0) {
-            mainView.setVisibility(View.VISIBLE);
+            viewBinding.mainView.setVisibility(View.VISIBLE);
         } else {
-            noData.setVisibility(View.VISIBLE);
+            viewBinding.noData.setVisibility(View.VISIBLE);
         }
     }
 

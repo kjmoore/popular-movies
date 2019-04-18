@@ -23,6 +23,9 @@ android {
         sourceCompatibility JavaVersion.VERSION_1_8
         targetCompatibility JavaVersion.VERSION_1_8
     }
+    dataBinding {
+        enabled true
+    }
 }
 
 dependencies {
@@ -33,7 +36,6 @@ dependencies {
 
     implementation 'com.squareup.picasso:picasso:2.5.2'
     implementation 'com.google.code.gson:gson:2.8.5'
-    implementation 'com.jakewharton:butterknife:10.1.0'
 
     annotationProcessor 'com.jakewharton:butterknife-compiler:10.1.0'
 
