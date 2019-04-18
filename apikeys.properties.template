@@ -1,0 +1,3 @@
+# This file is used to store all API keys for the project, they are referenced in the build config field in app/build.gradle
+# Please copy this file to apikeys.properties and fill in the keys before use
+TheMovieDBAPIKey = ""

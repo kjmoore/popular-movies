@@ -16,7 +16,7 @@ android {
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
         }
         buildTypes.each {
-            it.buildConfigField 'String', 'TheMovieDBAPIKey', TheMovieDBAPIKey
+            it.buildConfigField 'String', 'TheMovieDBAPIKey', apiKeys['TheMovieDBAPIKey']
         }
     }
     compileOptions {
@@ -27,6 +27,7 @@ android {
         enabled true
     }
 }
+
 
 dependencies {
     implementation fileTree(dir: 'libs', include: ['*.jar'])

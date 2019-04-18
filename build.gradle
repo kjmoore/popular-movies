@@ -25,3 +25,8 @@ allprojects {
 task clean(type: Delete) {
     delete rootProject.buildDir
 }
+
+def propertiesFile = file('apikeys.properties')
+assert propertiesFile.exists() : 'There is no API keys file defined, please copy apikeys.properties.template to apikeys.properties and fill in the values'
+ext.apiKeys = new Properties()
+apiKeys.load(new FileInputStream(propertiesFile))
