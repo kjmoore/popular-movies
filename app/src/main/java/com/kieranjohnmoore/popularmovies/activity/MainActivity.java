@@ -98,6 +98,10 @@ public class MainActivity extends AppCompatActivity {
                 sortOrder = MainViewModel.SORT_ORDER.RATED;
                 startUIUpdate();
                 return true;
+            case R.id.action_sort_favourites:
+                sortOrder = MainViewModel.SORT_ORDER.FAV;
+                startUIUpdate();
+                return true;
             default:
                 return super.onOptionsItemSelected(item);
         }

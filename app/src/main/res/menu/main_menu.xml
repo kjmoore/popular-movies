@@ -11,6 +11,11 @@
         android:orderInCategory="1"
         app:showAsAction="never"
         android:title="@string/sort_rating"/>
+    <item
+        android:id="@+id/action_sort_favourites"
+        android:orderInCategory="1"
+        app:showAsAction="never"
+        android:title="@string/show_favourites"/>
 
     <item
         android:id="@+id/action_reload"
