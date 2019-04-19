@@ -1,4 +1,4 @@
-package com.kieranjohnmoore.popularmovies;
+package com.kieranjohnmoore.popularmovies.binding;
 
 import android.util.Log;
 import android.widget.ImageView;

@@ -1,4 +1,4 @@
-package com.kieranjohnmoore.popularmovies;
+package com.kieranjohnmoore.popularmovies.activity;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -6,6 +6,7 @@ import android.util.Log;
 import android.view.Menu;
 import android.widget.Toast;
 
+import com.kieranjohnmoore.popularmovies.R;
 import com.kieranjohnmoore.popularmovies.databinding.ActivityDetailBinding;
 import com.kieranjohnmoore.popularmovies.moviedb.model.Movie;
 

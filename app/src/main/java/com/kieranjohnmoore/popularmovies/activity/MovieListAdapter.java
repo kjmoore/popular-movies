@@ -1,4 +1,4 @@
-package com.kieranjohnmoore.popularmovies;
+package com.kieranjohnmoore.popularmovies.activity;
 
 import android.content.Intent;
 import android.util.Log;

@@ -50,7 +50,7 @@ public class MovieDBApi {
 
     public static final int POSTER_IMAGE_WIDTH = 342;
 
-    List<Movie> getMovies(int page, SortBy key) {
+    public List<Movie> getMovies(int page, SortBy key) {
         final Uri uri = Uri.parse(BASE_URL + key.getKey()).buildUpon()
                 .appendQueryParameter(KEY_API_KEY, API_KEY)
                 .appendQueryParameter(KEY_PAGE, Integer.toString(page))

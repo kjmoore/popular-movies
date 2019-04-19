@@ -1,4 +1,4 @@
-package com.kieranjohnmoore.popularmovies;
+package com.kieranjohnmoore.popularmovies.activity;
 
 import android.os.Bundle;
 import android.util.DisplayMetrics;
@@ -8,29 +8,26 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.Toast;
 
+import com.kieranjohnmoore.popularmovies.R;
 import com.kieranjohnmoore.popularmovies.databinding.ActivityMainBinding;
 import com.kieranjohnmoore.popularmovies.moviedb.MovieDBApi;
-import com.kieranjohnmoore.popularmovies.moviedb.MovieListDownloader;
 import com.kieranjohnmoore.popularmovies.moviedb.model.Movie;
+import com.kieranjohnmoore.popularmovies.viewmodel.MainViewModel;
 
 import java.util.List;
 
-import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.databinding.DataBindingUtil;
-import androidx.loader.app.LoaderManager;
-import androidx.loader.content.Loader;
+import androidx.lifecycle.ViewModelProviders;
 import androidx.recyclerview.widget.GridLayoutManager;
 
-public class MainActivity extends AppCompatActivity
-        implements LoaderManager.LoaderCallbacks<List<Movie>> {
+public class MainActivity extends AppCompatActivity {
     private static final String TAG = MainActivity.class.getSimpleName();
 
     private final MovieListAdapter movieListAdapter = new MovieListAdapter();
-    private MovieDBApi.SortBy sortBy = MovieDBApi.SortBy.POPULAR;
 
-    ActivityMainBinding viewBinding;
+    private ActivityMainBinding viewBinding;
+    private MainViewModel.SORT_ORDER sortOrder;
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -51,18 +48,12 @@ public class MainActivity extends AppCompatActivity
         viewBinding.mainView.setLayoutManager(layoutManager);
         viewBinding.mainView.setAdapter(movieListAdapter);
 
-        LoaderManager.getInstance(this).initLoader(
-                MovieListDownloader.LOADER_ID, getDownloaderBundle(), this);
+        final MainViewModel viewModel = ViewModelProviders.of(this).get(MainViewModel.class);
+        viewModel.getMovies().observe(this, this::finishUIUpdate);
 
         showProgressBar();
     }
 
-    private Bundle getDownloaderBundle() {
-        final Bundle data = new Bundle();
-        data.putSerializable(MovieListDownloader.BUNDLE_SORT_KEY, sortBy);
-        data.putInt(MovieListDownloader.BUNDLE_PAGE_NUMBER, 1);
-        return data;
-    }
 
     private void showProgressBar() {
         viewBinding.mainView.setVisibility(View.INVISIBLE);
@@ -73,8 +64,8 @@ public class MainActivity extends AppCompatActivity
     private void startUIUpdate() {
         Log.d(TAG, "Requesting new data for the UI");
 
-        LoaderManager.getInstance(this).restartLoader(
-                MovieListDownloader.LOADER_ID, getDownloaderBundle(), this);
+        final MainViewModel viewModel = ViewModelProviders.of(this).get(MainViewModel.class);
+        viewModel.setSortOrder(sortOrder);
 
         showProgressBar();
     }
@@ -96,14 +87,15 @@ public class MainActivity extends AppCompatActivity
             case R.id.action_reload:
                 final String textToShow = getString(R.string.reload_text);
                 Toast.makeText(MainActivity.this, textToShow, Toast.LENGTH_SHORT).show();
-                startUIUpdate();
+                final MainViewModel viewModel = ViewModelProviders.of(this).get(MainViewModel.class);
+                viewModel.refreshData();
                 return true;
             case R.id.action_sort_popular:
-                sortBy = MovieDBApi.SortBy.POPULAR;
+                sortOrder = MainViewModel.SORT_ORDER.POPULAR;
                 startUIUpdate();
                 return true;
             case R.id.action_sort_rating:
-                sortBy = MovieDBApi.SortBy.RATING;
+                sortOrder = MainViewModel.SORT_ORDER.RATED;
                 startUIUpdate();
                 return true;
             default:
@@ -120,18 +112,4 @@ public class MainActivity extends AppCompatActivity
         float total = screenWidthDp / columnWidthDp;
         return Math.round(total);
     }
-
-    @NonNull
-    @Override
-    public Loader<List<Movie>> onCreateLoader(int id, @Nullable Bundle args) {
-        return new MovieListDownloader(this, args);
-    }
-
-    @Override
-    public void onLoadFinished(@NonNull Loader<List<Movie>> loader, List<Movie> data) {
-        finishUIUpdate(data);
-    }
-
-    @Override
-    public void onLoaderReset(@NonNull Loader<List<Movie>> loader) {}
 }
