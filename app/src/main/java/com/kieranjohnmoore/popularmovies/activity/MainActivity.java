@@ -25,9 +25,7 @@ public class MainActivity extends AppCompatActivity {
     private static final String TAG = MainActivity.class.getSimpleName();
 
     private final MovieListAdapter movieListAdapter = new MovieListAdapter();
-
     private ActivityMainBinding viewBinding;
-
     private List<Movie> favouriteMovies;
 
     public enum SORT_ORDER {
@@ -62,7 +60,6 @@ public class MainActivity extends AppCompatActivity {
 
         showProgressBar();
     }
-
 
     private void showProgressBar() {
         Log.d(TAG, "Showing the progress bar, loading data");
