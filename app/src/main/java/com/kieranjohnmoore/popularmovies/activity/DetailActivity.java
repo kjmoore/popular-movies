@@ -7,6 +7,8 @@ import android.view.Menu;
 import android.widget.Toast;
 
 import com.kieranjohnmoore.popularmovies.R;
+import com.kieranjohnmoore.popularmovies.database.AppDatabase;
+import com.kieranjohnmoore.popularmovies.database.task.AddToDbTask;
 import com.kieranjohnmoore.popularmovies.databinding.ActivityDetailBinding;
 import com.kieranjohnmoore.popularmovies.moviedb.model.Movie;
 
@@ -17,6 +19,8 @@ public class DetailActivity extends AppCompatActivity {
     private static final String TAG = DetailActivity.class.getSimpleName();
 
     public static final String MOVIE = "movie_details";
+
+    private Movie movie;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -29,12 +33,14 @@ public class DetailActivity extends AppCompatActivity {
             return;
         }
 
-        final Movie movie = intent.getParcelableExtra(MOVIE);
+        movie = intent.getParcelableExtra(MOVIE);
 
         Log.d(TAG, "Detail started with: " + movie.toString());
 
         ActivityDetailBinding viewDataBinding = DataBindingUtil.setContentView(this, R.layout.activity_detail);
         viewDataBinding.setMovie(movie);
+
+        viewDataBinding.saveToFav.setOnClickListener((view)-> this.toggleFavourite());
     }
 
     private void closeOnError() {
@@ -47,5 +53,10 @@ public class DetailActivity extends AppCompatActivity {
         getMenuInflater().inflate(R.menu.detail, menu);
 
         return true;
+    }
+
+    public void toggleFavourite() {
+        //TODO: Check if it's there
+        new AddToDbTask(AppDatabase.getInstance(this.getApplication())).execute(movie);
     }
 }

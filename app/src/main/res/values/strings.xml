@@ -10,5 +10,6 @@
     <string name="synopsis">Could not load synopsis</string>
     <string name="user_rating_tag">User Rating:</string>
     <string name="release_date_tag">Released:</string>
-    <string name="show_favourites">Show Favourite Movies</string>
+    <string name="show_favourites">Show favourites</string>
+    <string name="add_to_fav">Add to Favourites List</string>
 </resources>

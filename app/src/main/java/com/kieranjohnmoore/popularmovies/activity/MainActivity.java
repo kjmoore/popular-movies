@@ -27,7 +27,15 @@ public class MainActivity extends AppCompatActivity {
     private final MovieListAdapter movieListAdapter = new MovieListAdapter();
 
     private ActivityMainBinding viewBinding;
-    private MainViewModel.SORT_ORDER sortOrder;
+
+    private List<Movie> favouriteMovies;
+
+    public enum SORT_ORDER {
+        FAV,
+        POPULAR,
+        RATED
+    }
+    private SORT_ORDER sortOrder = SORT_ORDER.POPULAR;
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -49,35 +57,61 @@ public class MainActivity extends AppCompatActivity {
         viewBinding.mainView.setAdapter(movieListAdapter);
 
         final MainViewModel viewModel = ViewModelProviders.of(this).get(MainViewModel.class);
-        viewModel.getMovies().observe(this, this::finishUIUpdate);
+        viewModel.getMovies().observe(this, this::onMoviesDownloaded);
+        viewModel.getFavouriteMovies().observe(this, this::onFavouriteMoviesChanged);
 
         showProgressBar();
     }
 
 
     private void showProgressBar() {
+        Log.d(TAG, "Showing the progress bar, loading data");
         viewBinding.mainView.setVisibility(View.INVISIBLE);
         viewBinding.noData.setVisibility(View.INVISIBLE);
         viewBinding.progressBar.setVisibility(View.VISIBLE);
     }
 
-    private void startUIUpdate() {
-        Log.d(TAG, "Requesting new data for the UI");
+    private void showMovies(List<Movie> movies) {
+        if (movies != null) {
+            movieListAdapter.updateMovies(movies);
 
-        final MainViewModel viewModel = ViewModelProviders.of(this).get(MainViewModel.class);
-        viewModel.setSortOrder(sortOrder);
-
-        showProgressBar();
+            viewBinding.progressBar.setVisibility(View.INVISIBLE);
+            if (movies.size() > 0) {
+                viewBinding.mainView.setVisibility(View.VISIBLE);
+            } else {
+                viewBinding.noData.setVisibility(View.VISIBLE);
+            }
+        }
     }
 
-    private void finishUIUpdate(List<Movie> movies) {
-        Log.d(TAG, "Updating UI with new data");
-        movieListAdapter.updateMovies(movies);
-        viewBinding.progressBar.setVisibility(View.INVISIBLE);
-        if (movies.size() > 0) {
-            viewBinding.mainView.setVisibility(View.VISIBLE);
-        } else {
-            viewBinding.noData.setVisibility(View.VISIBLE);
+    private void updateSortOrder() {
+        showProgressBar();
+        final MainViewModel viewModel = ViewModelProviders.of(this).get(MainViewModel.class);
+        switch (sortOrder) {
+            case FAV:
+                showMovies(favouriteMovies);
+                break;
+            case POPULAR:
+                viewModel.setSortOrderAndDownload(MovieDBApi.SortBy.POPULAR);
+                break;
+            case RATED:
+                viewModel.setSortOrderAndDownload(MovieDBApi.SortBy.RATING);
+                break;
+        }
+    }
+
+    private void onMoviesDownloaded(List<Movie> movies) {
+        Log.d(TAG, "Movies Changed");
+        if (sortOrder == SORT_ORDER.POPULAR || sortOrder == SORT_ORDER.RATED) {
+            showMovies(movies);
+        }
+    }
+
+    private void onFavouriteMoviesChanged(List<Movie> movies) {
+        Log.d(TAG, "Favourite Movies Changed");
+        favouriteMovies = movies;
+        if (sortOrder == SORT_ORDER.FAV) {
+            showMovies(movies);
         }
     }
 
@@ -88,19 +122,19 @@ public class MainActivity extends AppCompatActivity {
                 final String textToShow = getString(R.string.reload_text);
                 Toast.makeText(MainActivity.this, textToShow, Toast.LENGTH_SHORT).show();
                 final MainViewModel viewModel = ViewModelProviders.of(this).get(MainViewModel.class);
-                viewModel.refreshData();
+                viewModel.refreshServerData();
                 return true;
             case R.id.action_sort_popular:
-                sortOrder = MainViewModel.SORT_ORDER.POPULAR;
-                startUIUpdate();
+                sortOrder = SORT_ORDER.POPULAR;
+                updateSortOrder();
                 return true;
             case R.id.action_sort_rating:
-                sortOrder = MainViewModel.SORT_ORDER.RATED;
-                startUIUpdate();
+                sortOrder = SORT_ORDER.RATED;
+                updateSortOrder();
                 return true;
             case R.id.action_sort_favourites:
-                sortOrder = MainViewModel.SORT_ORDER.FAV;
-                startUIUpdate();
+                sortOrder = SORT_ORDER.FAV;
+                updateSortOrder();
                 return true;
             default:
                 return super.onOptionsItemSelected(item);

@@ -11,31 +11,37 @@ import java.util.List;
 import java.util.Locale;
 
 import androidx.annotation.NonNull;
+import androidx.room.Entity;
+import androidx.room.Ignore;
+import androidx.room.PrimaryKey;
 
+@Entity(tableName = "movies")
 public class Movie implements Parcelable {
 
     @SerializedName("poster_path")
-    private String posterPath = "";
-    private boolean adult = false;
-    private String overview = "";
+    public String posterPath = "";
+    public boolean adult = false;
+    public String overview = "";
     @SerializedName("release_date")
-    private String releaseDate = "";
+    public String releaseDate = "";
     @SerializedName("genre_ids")
-    private List<Integer> genreIds = Collections.emptyList();
-    private int id = 0;
+    @Ignore
+    public List<Integer> genreIds = Collections.emptyList();
+    @PrimaryKey
+    public int id = 0;
     @SerializedName("original_title")
-    private String originalTitle = "";
+    public String originalTitle = "";
     @SerializedName("original_language")
-    private String originalLanguage = "";
-    private String title = "";
+    public String originalLanguage = "";
+    public String title = "";
     @SerializedName("backdrop_path")
-    private String backdropPath = "";
-    private double popularity = 0;
+    public String backdropPath = "";
+    public double popularity = 0;
     @SerializedName("vote_count")
-    private int voteCount = 0;
-    private boolean video = false;
+    public int voteCount = 0;
+    public boolean video = false;
     @SerializedName("vote_average")
-    private double voteAverage = 0;
+    public double voteAverage = 0;
 
     public String getPosterPath() {
         return posterPath;
@@ -81,6 +87,7 @@ public class Movie implements Parcelable {
         return popularity;
     }
 
+    @Ignore
     public String getPopularityString() {
         return String.format(Locale.getDefault(),"%.2f", getPopularity());
     }
@@ -97,12 +104,14 @@ public class Movie implements Parcelable {
         return voteAverage;
     }
 
+    @Ignore
     public String getVoteAverageString() {
         return String.format(Locale.getDefault(),"%.2f", getVoteAverage());
     }
 
     @NonNull
     @Override
+    @Ignore
     public String toString() {
         return "Movie{" +
                 "posterPath='" + posterPath + '\'' +
@@ -123,11 +132,13 @@ public class Movie implements Parcelable {
     }
 
     @Override
+    @Ignore
     public int describeContents() {
         return 0;
     }
 
     @Override
+    @Ignore
     public void writeToParcel(Parcel dest, int flags) {
         //Warning, changing this requires changes to the CREATOR
         dest.writeString(posterPath);
@@ -146,6 +157,7 @@ public class Movie implements Parcelable {
         dest.writeDouble(voteAverage);
     }
 
+    @Ignore
     public static final Parcelable.Creator<Movie> CREATOR = new Parcelable.Creator<Movie>() {
         public Movie createFromParcel(Parcel in) {
             //Warning, any changes here need to be reflected in writeToParcel

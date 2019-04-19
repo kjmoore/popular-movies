@@ -33,7 +33,7 @@ public class MovieListDownloader extends AsyncTask<Integer, Void, List<Movie>> {
     protected void onPostExecute(List<Movie> movies) {
         final MainViewModel app = adapterReference.get();
         if (app != null) {
-            app.update(movies);
+            app.setDownloadedMovies(movies);
         }
 
         super.onPostExecute(movies);
