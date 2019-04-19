@@ -8,9 +8,7 @@ import androidx.lifecycle.LiveData;
 import androidx.room.Dao;
 import androidx.room.Delete;
 import androidx.room.Insert;
-import androidx.room.OnConflictStrategy;
 import androidx.room.Query;
-import androidx.room.Update;
 
 @Dao
 public interface MoviesDao {
@@ -20,12 +18,9 @@ public interface MoviesDao {
     @Insert
     void addMovie(Movie taskEntry);
 
-    @Update(onConflict = OnConflictStrategy.REPLACE)
-    void updateTask(Movie taskEntry);
-
     @Delete
-    void deleteTask(Movie taskEntry);
+    void deleteMovie(Movie taskEntry);
 
     @Query("SELECT * FROM movies WHERE id = :id")
-    LiveData<Movie> loadTaskById(int id);
+    Movie getMovie(int id);
 }

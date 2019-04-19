@@ -5,11 +5,12 @@
     <string name="movie_poster_image">Movie Poster Image</string>
     <string name="detail_error_message">Could not display movie data</string>
     <string name="no_data">No movies could be downloaded</string>
-    <string name="sort_popular">Sort by most popular</string>
-    <string name="sort_rating">Sort by user rating</string>
+    <string name="sort_popular">Show most popular</string>
+    <string name="sort_rating">Show top user rated</string>
     <string name="synopsis">Could not load synopsis</string>
     <string name="user_rating_tag">User Rating:</string>
     <string name="release_date_tag">Released:</string>
     <string name="show_favourites">Show favourites</string>
     <string name="add_to_fav">Add to Favourites List</string>
+    <string name="remove_from_fav">Remove from Favourites List</string>
 </resources>

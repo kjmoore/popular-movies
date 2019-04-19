@@ -8,7 +8,6 @@ import android.widget.Toast;
 
 import com.kieranjohnmoore.popularmovies.R;
 import com.kieranjohnmoore.popularmovies.database.AppDatabase;
-import com.kieranjohnmoore.popularmovies.database.task.AddToDbTask;
 import com.kieranjohnmoore.popularmovies.databinding.ActivityDetailBinding;
 import com.kieranjohnmoore.popularmovies.moviedb.model.Movie;
 
@@ -20,7 +19,11 @@ public class DetailActivity extends AppCompatActivity {
 
     public static final String MOVIE = "movie_details";
 
+    private final AppDatabase database = AppDatabase.getInstance(this.getApplication());
+
     private Movie movie;
+    ActivityDetailBinding viewDataBinding;
+    private boolean isFav = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -37,10 +40,28 @@ public class DetailActivity extends AppCompatActivity {
 
         Log.d(TAG, "Detail started with: " + movie.toString());
 
-        ActivityDetailBinding viewDataBinding = DataBindingUtil.setContentView(this, R.layout.activity_detail);
+        viewDataBinding = DataBindingUtil.setContentView(this, R.layout.activity_detail);
         viewDataBinding.setMovie(movie);
 
+        AppDatabase.getExecutor().submit(()-> {
+            Log.d(TAG, "Checking if in DB: " + movie.id);
+            final Movie test =  AppDatabase.getInstance(this).moviesDao().getMovie(movie.id);
+            runOnUiThread(() -> {
+                setIsFav(test != null);
+            });
+        });
+
+
         viewDataBinding.saveToFav.setOnClickListener((view)-> this.toggleFavourite());
+    }
+
+    private void setIsFav(boolean isFav) {
+        this.isFav = isFav;
+        if (isFav) {
+            viewDataBinding.saveToFav.setText(R.string.remove_from_fav);
+        } else {
+            viewDataBinding.saveToFav.setText(R.string.add_to_fav);
+        }
     }
 
     private void closeOnError() {
@@ -56,7 +77,18 @@ public class DetailActivity extends AppCompatActivity {
     }
 
     public void toggleFavourite() {
-        //TODO: Check if it's there
-        new AddToDbTask(AppDatabase.getInstance(this.getApplication())).execute(movie);
+        if (isFav) {
+            AppDatabase.getExecutor().submit(() -> {
+                Log.d(TAG, "Deleting Movie: " + movie);
+                database.moviesDao().deleteMovie(movie);
+            });
+            setIsFav(false);
+        } else {
+            AppDatabase.getExecutor().submit(() -> {
+                Log.d(TAG, "Saving Movie: " + movie);
+                database.moviesDao().addMovie(movie);
+            });
+            setIsFav(true);
+        }
     }
 }

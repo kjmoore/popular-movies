@@ -2,9 +2,12 @@ package com.kieranjohnmoore.popularmovies.binding;
 
 import android.util.Log;
 import android.widget.ImageView;
+import android.widget.TextView;
 
 import com.kieranjohnmoore.popularmovies.moviedb.MovieDBApi;
 import com.squareup.picasso.Picasso;
+
+import java.util.Locale;
 
 import androidx.databinding.BindingAdapter;
 
@@ -28,5 +31,10 @@ public class BindingAdapters {
                 .centerCrop()
                 .error(android.R.drawable.stat_notify_error)
                 .into(poster);
+    }
+
+    @BindingAdapter("android:text")
+    public static void setText(final TextView text, final double toSet) {
+        text.setText(String.format(Locale.getDefault(),"%.2f", toSet));
     }
 }

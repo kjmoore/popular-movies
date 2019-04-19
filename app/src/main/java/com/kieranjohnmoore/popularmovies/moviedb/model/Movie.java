@@ -8,7 +8,6 @@ import com.google.gson.annotations.SerializedName;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
-import java.util.Locale;
 
 import androidx.annotation.NonNull;
 import androidx.room.Entity;
@@ -17,15 +16,14 @@ import androidx.room.PrimaryKey;
 
 @Entity(tableName = "movies")
 public class Movie implements Parcelable {
-
     @SerializedName("poster_path")
     public String posterPath = "";
     public boolean adult = false;
     public String overview = "";
     @SerializedName("release_date")
     public String releaseDate = "";
-    @SerializedName("genre_ids")
     @Ignore
+    @SerializedName("genre_ids")
     public List<Integer> genreIds = Collections.emptyList();
     @PrimaryKey
     public int id = 0;
@@ -42,72 +40,6 @@ public class Movie implements Parcelable {
     public boolean video = false;
     @SerializedName("vote_average")
     public double voteAverage = 0;
-
-    public String getPosterPath() {
-        return posterPath;
-    }
-
-    public boolean isAdult() {
-        return adult;
-    }
-
-    public String getOverview() {
-        return overview;
-    }
-
-    public String getReleaseDate() {
-        return releaseDate;
-    }
-
-    public List<Integer> getGenreIds() {
-        return genreIds;
-    }
-
-    public int getId() {
-        return id;
-    }
-
-    public String getOriginalTitle() {
-        return originalTitle;
-    }
-
-    public String getOriginalLanguage() {
-        return originalLanguage;
-    }
-
-    public String getTitle() {
-        return title;
-    }
-
-    public String getBackdropPath() {
-        return backdropPath;
-    }
-
-    public double getPopularity() {
-        return popularity;
-    }
-
-    @Ignore
-    public String getPopularityString() {
-        return String.format(Locale.getDefault(),"%.2f", getPopularity());
-    }
-
-    public int getVoteCount() {
-        return voteCount;
-    }
-
-    public boolean isVideo() {
-        return video;
-    }
-
-    public double getVoteAverage() {
-        return voteAverage;
-    }
-
-    @Ignore
-    public String getVoteAverageString() {
-        return String.format(Locale.getDefault(),"%.2f", getVoteAverage());
-    }
 
     @NonNull
     @Override
