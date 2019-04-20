@@ -5,15 +5,24 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
 import android.widget.Toast;
 
 import com.kieranjohnmoore.popularmovies.R;
 import com.kieranjohnmoore.popularmovies.database.AppDatabase;
 import com.kieranjohnmoore.popularmovies.databinding.ActivityDetailBinding;
 import com.kieranjohnmoore.popularmovies.moviedb.model.Movie;
+import com.kieranjohnmoore.popularmovies.moviedb.model.Trailer;
+import com.kieranjohnmoore.popularmovies.viewmodel.DetailViewModel;
+import com.kieranjohnmoore.popularmovies.viewmodel.MainViewModel;
+
+import java.util.ArrayList;
+import java.util.List;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.databinding.DataBindingUtil;
+import androidx.lifecycle.ViewModelProviders;
+import androidx.recyclerview.widget.GridLayoutManager;
 
 public class DetailActivity extends AppCompatActivity {
     private static final String TAG = DetailActivity.class.getSimpleName();
@@ -25,6 +34,7 @@ public class DetailActivity extends AppCompatActivity {
     private Movie movie;
     ActivityDetailBinding viewDataBinding;
     private boolean isFav = false;
+    final TrailersListAdapter trailersListAdapter = new TrailersListAdapter();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -52,8 +62,24 @@ public class DetailActivity extends AppCompatActivity {
             });
         });
 
+        final GridLayoutManager layoutManager = new GridLayoutManager(this, 1);
+        viewDataBinding.trailersList.setLayoutManager(layoutManager);
+        viewDataBinding.trailersList.setAdapter(trailersListAdapter);
 
+        final DetailViewModel viewModel = ViewModelProviders.of(this).get(DetailViewModel.class);
+        viewModel.getTrailers().observe(this, this::onTrailersDownloaded);
+
+        viewModel.setMovieIdAndDownload(movie.id);
+
+        //TODO: Button for reviews
         viewDataBinding.saveToFav.setOnClickListener((view)-> this.toggleFavourite());
+    }
+
+    private void onTrailersDownloaded(List<Trailer> trailers) {
+        if (trailers != null && trailers.size() > 0) {
+            viewDataBinding.trailersGroup.setVisibility(View.VISIBLE);
+            trailersListAdapter.setTrailers(trailers);
+        }
     }
 
     private void setIsFav(boolean isFav) {

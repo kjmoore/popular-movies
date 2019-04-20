@@ -54,7 +54,7 @@ public class Movie implements Parcelable {
                 ", id=" + id +
                 ", originalTitle='" + originalTitle + '\'' +
                 ", originalLanguage='" + originalLanguage + '\'' +
-                ", title='" + title + '\'' +
+                ", name='" + title + '\'' +
                 ", backdropPath='" + backdropPath + '\'' +
                 ", popularity=" + popularity +
                 ", voteCount=" + voteCount +

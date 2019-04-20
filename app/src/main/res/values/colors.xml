@@ -6,4 +6,5 @@
     <color name="posterBackground">#000000</color>
     <color name="posterBorder">#CCCCCC</color>
     <color name="posterText">#FFFFFF</color>
+    <color name="trailerText">#222222</color>
 </resources>
