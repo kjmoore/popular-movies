@@ -24,6 +24,8 @@ import androidx.recyclerview.widget.GridLayoutManager;
 public class MainActivity extends AppCompatActivity {
     private static final String TAG = MainActivity.class.getSimpleName();
 
+    public static final String MOVIE = "movie_details";
+
     private final MovieListAdapter movieListAdapter = new MovieListAdapter();
     private ActivityMainBinding viewBinding;
     private List<Movie> favouriteMovies;

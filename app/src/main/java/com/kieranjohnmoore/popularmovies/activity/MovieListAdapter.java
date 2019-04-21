@@ -65,7 +65,7 @@ public class MovieListAdapter extends RecyclerView.Adapter<MovieListAdapter.Movi
         public void onClick(View v) {
             Log.d(TAG, "Clicked: " + movies.get(getAdapterPosition()).title);
             final Intent intent = new Intent(v.getContext(), DetailActivity.class);
-            intent.putExtra(DetailActivity.MOVIE, movie);
+            intent.putExtra(MainActivity.MOVIE, movie);
             v.getContext().startActivity(intent);
         }
     }

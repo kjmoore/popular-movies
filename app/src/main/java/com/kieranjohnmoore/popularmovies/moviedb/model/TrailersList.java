@@ -4,6 +4,6 @@ import java.util.Collections;
 import java.util.List;
 
 public class TrailersList {
-    public int id = 0;
+    public int id;
     public List<Trailer> youtube = Collections.emptyList();
 }

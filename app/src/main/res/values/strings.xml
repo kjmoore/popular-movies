@@ -17,4 +17,6 @@
     <string name="trailers">Trailers</string>
     <string name="read_reviews">Read Reviews</string>
     <string name="no_reviews">No reviews could be found</string>
+    <string name="review_content">Review</string>
+    <string name="review_author">Author</string>
 </resources>

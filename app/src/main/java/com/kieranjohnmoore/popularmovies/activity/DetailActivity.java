@@ -17,6 +17,7 @@ import com.kieranjohnmoore.popularmovies.moviedb.model.Movie;
 import com.kieranjohnmoore.popularmovies.moviedb.model.Trailer;
 import com.kieranjohnmoore.popularmovies.viewmodel.DetailViewModel;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import androidx.appcompat.app.AppCompatActivity;
@@ -26,8 +27,6 @@ import androidx.recyclerview.widget.GridLayoutManager;
 
 public class DetailActivity extends AppCompatActivity {
     private static final String TAG = DetailActivity.class.getSimpleName();
-
-    public static final String MOVIE = "movie_details";
 
     private final AppDatabase database = AppDatabase.getInstance(this.getApplication());
 
@@ -47,7 +46,7 @@ public class DetailActivity extends AppCompatActivity {
             return;
         }
 
-        movie = intent.getParcelableExtra(MOVIE);
+        movie = intent.getParcelableExtra(MainActivity.MOVIE);
 
         Log.d(TAG, "Detail started with: " + movie.toString());
 
@@ -57,29 +56,29 @@ public class DetailActivity extends AppCompatActivity {
         AppDatabase.getExecutor().submit(()-> {
             Log.d(TAG, "Checking if in DB: " + movie.id);
             final Movie test =  AppDatabase.getInstance(this).moviesDao().getMovie(movie.id);
-            runOnUiThread(() -> {
-                setIsFav(test != null);
-            });
+            runOnUiThread(() -> setIsFav(test != null));
         });
 
         final GridLayoutManager layoutManager = new GridLayoutManager(this, 1);
         viewDataBinding.trailersList.setLayoutManager(layoutManager);
         viewDataBinding.trailersList.setAdapter(trailersListAdapter);
 
-        //Ensure the recycler view only loads enough containers to fill the screen,
-        //since it is in a scrollview it sees it's size as massive and attempts to fill them all.
-        final DisplayMetrics displayMetrics = this.getResources().getDisplayMetrics();
-        ViewGroup.LayoutParams layoutParams = viewDataBinding.trailersList.getLayoutParams();
-        layoutParams.height = displayMetrics.heightPixels;
-        viewDataBinding.trailersList.setLayoutParams(layoutParams);
 
         final DetailViewModel viewModel = ViewModelProviders.of(this).get(DetailViewModel.class);
         viewModel.getTrailers().observe(this, this::onTrailersDownloaded);
 
+
         viewModel.setMovieIdAndDownload(movie.id);
 
-        //TODO: Button for reviews
+        viewDataBinding.reviewsButton.setOnClickListener((view)-> this.showReviews());
         viewDataBinding.saveToFav.setOnClickListener((view)-> this.toggleFavourite());
+    }
+
+    private void showReviews() {
+        Log.d(TAG, "Showing reviews for: " + movie.title);
+        final Intent intent = new Intent(this, ReviewsActivity.class);
+        intent.putExtra(MainActivity.MOVIE, movie);
+        startActivity(intent);
     }
 
     private void onTrailersDownloaded(List<Trailer> trailers) {

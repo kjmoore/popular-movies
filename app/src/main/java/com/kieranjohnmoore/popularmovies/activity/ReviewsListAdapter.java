@@ -1,12 +1,10 @@
 package com.kieranjohnmoore.popularmovies.activity;
 
-import android.util.Log;
 import android.view.LayoutInflater;
-import android.view.View;
 import android.view.ViewGroup;
 
-import com.kieranjohnmoore.popularmovies.databinding.TrailerItemBinding;
-import com.kieranjohnmoore.popularmovies.moviedb.model.Trailer;
+import com.kieranjohnmoore.popularmovies.databinding.ReviewItemBinding;
+import com.kieranjohnmoore.popularmovies.moviedb.model.Review;
 
 import java.util.Collections;
 import java.util.List;
@@ -14,59 +12,45 @@ import java.util.List;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
-public class ReviewsListAdapter extends RecyclerView.Adapter<ReviewsListAdapter.TrailersListHolder> {
-    private static final String TAG = ReviewsListAdapter.class.getSimpleName();
-
-    private List<Trailer> trailers = Collections.emptyList();
+public class ReviewsListAdapter extends RecyclerView.Adapter<ReviewsListAdapter.ReviewListHolder> {
+    private List<Review> reviews = Collections.emptyList();
 
     @NonNull
     @Override
-    public TrailersListHolder onCreateViewHolder(@NonNull ViewGroup viewGroup, int i) {
+    public ReviewListHolder onCreateViewHolder(@NonNull ViewGroup viewGroup, int i) {
         final LayoutInflater layoutInflater = LayoutInflater.from(viewGroup.getContext());
-        final TrailerItemBinding itemBinding =
-                TrailerItemBinding.inflate(layoutInflater, viewGroup, false);
-        return new TrailersListHolder(itemBinding);
+        final ReviewItemBinding itemBinding =
+                ReviewItemBinding.inflate(layoutInflater, viewGroup, false);
+        return new ReviewListHolder(itemBinding);
     }
 
     @Override
-    public void onBindViewHolder(@NonNull TrailersListHolder trailersListHolder, int i) {
-        final Trailer trailer = trailers.get(i);
-        trailersListHolder.bind(trailer);
+    public void onBindViewHolder(@NonNull ReviewListHolder trailersListHolder, int i) {
+        final Review review = reviews.get(i);
+        trailersListHolder.bind(review);
     }
 
     @Override
     public int getItemCount() {
-        return trailers.size();
+        return reviews.size();
     }
 
-    void setTrailers(List<Trailer> trailers) {
-        this.trailers = trailers;
+    public void setReviews(List<Review> reviews) {
+        this.reviews = reviews;
         notifyDataSetChanged();
     }
 
-    class TrailersListHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
-        private Trailer trailer;
-        private TrailerItemBinding binding;
+    class ReviewListHolder extends RecyclerView.ViewHolder {
+        private ReviewItemBinding binding;
 
-        TrailersListHolder(TrailerItemBinding binding) {
+        ReviewListHolder(ReviewItemBinding binding) {
             super(binding.getRoot());
             this.binding = binding;
-            binding.getRoot().setOnClickListener(this);
         }
 
-        private void bind(@NonNull final Trailer trailer) {
-            this.trailer = trailer;
-            binding.setTrailer(trailer);
+        private void bind(@NonNull final Review review) {
+            binding.setReview(review);
             binding.executePendingBindings();
-        }
-
-        @Override
-        public void onClick(View v) {
-            Log.d(TAG, "Clicked: " + trailers.get(getAdapterPosition()).name);
-//            final Intent intent = new Intent(v.getContext(), DetailActivity.class);
-//            intent.putExtra(DetailActivity.MOVIE, trailer);
-//            v.getContext().startActivity(intent);
-            //TODO: Launch browser or youtube
         }
     }
 }

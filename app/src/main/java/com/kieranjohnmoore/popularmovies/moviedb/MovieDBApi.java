@@ -8,6 +8,8 @@ import com.google.gson.Gson;
 import com.kieranjohnmoore.popularmovies.BuildConfig;
 import com.kieranjohnmoore.popularmovies.moviedb.model.Movie;
 import com.kieranjohnmoore.popularmovies.moviedb.model.MovieList;
+import com.kieranjohnmoore.popularmovies.moviedb.model.Review;
+import com.kieranjohnmoore.popularmovies.moviedb.model.ReviewList;
 import com.kieranjohnmoore.popularmovies.moviedb.model.Trailer;
 import com.kieranjohnmoore.popularmovies.moviedb.model.TrailersList;
 
@@ -31,6 +33,7 @@ public class MovieDBApi {
     private static final String API_KEY = BuildConfig.TheMovieDBAPIKey;
     private static final String BASE_URL = SCHEME + "://api.themoviedb.org/3/movie/";
     private static final String TRAILERS_PATH = "/trailers";
+    private static final String REVIEWS_PATH = "/reviews";
 
     private static final String KEY_API_KEY = "api_key";
     private static final String KEY_PAGE = "page";
@@ -103,6 +106,34 @@ public class MovieDBApi {
             if (!data.isEmpty()) {
                 TrailersList list = new Gson().fromJson(data, TrailersList.class);
                 return list.youtube;
+            }
+        } catch (IOException e) {
+            Log.e(TAG, "Could not download data", e);
+        }
+
+        return Collections.emptyList();
+    }
+
+    List<Review> getReviews(int id) {
+        final Uri uri = Uri.parse(BASE_URL + id + REVIEWS_PATH).buildUpon()
+                .appendQueryParameter(KEY_API_KEY, API_KEY)
+                .build();
+
+        URL url = null;
+        try {
+            url = new URL(uri.toString());
+        } catch (MalformedURLException e) {
+            e.printStackTrace();
+        }
+
+        Log.d(TAG, "Connecting to URL: " + url);
+
+        try {
+            final String data = getResponseFromHttpUrl(url);
+
+            if (!data.isEmpty()) {
+                ReviewList list = new Gson().fromJson(data, ReviewList.class);
+                return list.reviews;
             }
         } catch (IOException e) {
             Log.e(TAG, "Could not download data", e);
