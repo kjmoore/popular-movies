@@ -8,7 +8,7 @@
             type="com.kieranjohnmoore.popularmovies.moviedb.model.Movie" />
     </data>
 
-<ScrollView
+<androidx.core.widget.NestedScrollView
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".activity.DetailActivity">
@@ -25,9 +25,10 @@
             android:layout_marginLeft="8dp"
             android:layout_marginTop="8dp"
             android:contentDescription="@string/movie_poster_image"
+            android:focusableInTouchMode="true"
+            app:imageUrl="@{movie.posterPath}"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            app:imageUrl = "@{movie.posterPath}"/>
+            app:layout_constraintTop_toTopOf="parent" />
 
         <TextView
             android:id="@+id/movie_title"
@@ -39,11 +40,11 @@
             android:layout_marginEnd="8dp"
             android:layout_marginRight="8dp"
             android:text="@{movie.title}"
-            tools:text="Movie Title!"
+            app:layout_constrainedWidth="true"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toEndOf="@+id/poster"
             app:layout_constraintTop_toTopOf="parent"
-            app:layout_constrainedWidth="true" />
+            tools:text="Movie Title!" />
 
         <TextView
             android:id="@+id/synopsis"
@@ -55,10 +56,10 @@
             android:layout_marginEnd="8dp"
             android:layout_marginRight="8dp"
             android:text="@{movie.overview}"
-            tools:text="The overview for the movie!"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/poster" />
+            app:layout_constraintTop_toBottomOf="@+id/poster"
+            tools:text="The overview for the movie!" />
 
         <TextView
             android:id="@+id/user_rating_tag"
@@ -76,10 +77,10 @@
             android:layout_height="wrap_content"
             android:layout_marginEnd="8dp"
             android:layout_marginRight="8dp"
-            android:text = "@{movie.voteAverage}"
-            tools:text = "1.5"
+            android:text="@{movie.voteAverage}"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/release_date" />
+            app:layout_constraintTop_toBottomOf="@+id/release_date"
+            tools:text="1.5" />
 
         <TextView
             android:id="@+id/release_date_tag"
@@ -100,13 +101,13 @@
             android:layout_marginEnd="8dp"
             android:layout_marginRight="8dp"
             android:text="@{movie.releaseDate}"
-            tools:text = "2019-03-23"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toTopOf="@+id/movie_title" />
+            app:layout_constraintTop_toTopOf="@+id/movie_title"
+            tools:text="2019-03-23" />
 
         <Button
             android:id="@+id/save_to_fav"
-            android:layout_width="200dp"
+            android:layout_width="0dp"
             android:layout_height="60dp"
             android:layout_marginStart="8dp"
             android:layout_marginLeft="8dp"
@@ -120,7 +121,7 @@
 
         <Button
             android:id="@+id/reviews_button"
-            android:layout_width="200dp"
+            android:layout_width="0dp"
             android:layout_height="60dp"
             android:layout_marginTop="8dp"
             android:text="@string/read_reviews"
@@ -130,10 +131,15 @@
 
         <androidx.constraintlayout.widget.Group
             android:id="@+id/trailers_group"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:layout_marginBottom="8dp"
             android:visibility="invisible"
-            app:constraint_referenced_ids="separator,textView,trailers_list" />
+            app:constraint_referenced_ids="separator,trailer_title,trailers_list"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/synopsis" />
 
         <ImageView
             android:id="@+id/separator"
@@ -151,7 +157,7 @@
             app:srcCompat="@color/colorPrimaryDark" />
 
         <TextView
-            android:id="@+id/textView"
+            android:id="@+id/trailer_title"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="8dp"
@@ -164,15 +170,17 @@
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/trailers_list"
             android:layout_width="match_parent"
-            android:layout_height="200dp"
+            android:layout_height="0dp"
             android:layout_marginStart="8dp"
             android:layout_marginLeft="8dp"
             android:layout_marginTop="8dp"
             android:layout_marginEnd="8dp"
             android:layout_marginRight="8dp"
+            android:layout_marginBottom="8dp"
+            app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/textView" />
+            app:layout_constraintTop_toBottomOf="@+id/trailer_title" />
 
         <Space
             android:id="@+id/space"
@@ -183,6 +191,6 @@
             app:layout_constraintTop_toBottomOf="@+id/trailers_list" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
-</ScrollView>
+</androidx.core.widget.NestedScrollView>
 
 </layout>

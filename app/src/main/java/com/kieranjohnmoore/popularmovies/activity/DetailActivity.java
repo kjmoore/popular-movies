@@ -2,10 +2,12 @@ package com.kieranjohnmoore.popularmovies.activity;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.DisplayMetrics;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.Toast;
 
 import com.kieranjohnmoore.popularmovies.R;
@@ -14,9 +16,7 @@ import com.kieranjohnmoore.popularmovies.databinding.ActivityDetailBinding;
 import com.kieranjohnmoore.popularmovies.moviedb.model.Movie;
 import com.kieranjohnmoore.popularmovies.moviedb.model.Trailer;
 import com.kieranjohnmoore.popularmovies.viewmodel.DetailViewModel;
-import com.kieranjohnmoore.popularmovies.viewmodel.MainViewModel;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import androidx.appcompat.app.AppCompatActivity;
@@ -65,6 +65,13 @@ public class DetailActivity extends AppCompatActivity {
         final GridLayoutManager layoutManager = new GridLayoutManager(this, 1);
         viewDataBinding.trailersList.setLayoutManager(layoutManager);
         viewDataBinding.trailersList.setAdapter(trailersListAdapter);
+
+        //Ensure the recycler view only loads enough containers to fill the screen,
+        //since it is in a scrollview it sees it's size as massive and attempts to fill them all.
+        final DisplayMetrics displayMetrics = this.getResources().getDisplayMetrics();
+        ViewGroup.LayoutParams layoutParams = viewDataBinding.trailersList.getLayoutParams();
+        layoutParams.height = displayMetrics.heightPixels;
+        viewDataBinding.trailersList.setLayoutParams(layoutParams);
 
         final DetailViewModel viewModel = ViewModelProviders.of(this).get(DetailViewModel.class);
         viewModel.getTrailers().observe(this, this::onTrailersDownloaded);
